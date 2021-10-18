@@ -9,8 +9,12 @@ import Foundation
 import CoreLocation
 import Alamofire
 
-//MARK:- WeatherService
 
+protocol ErrorAPIProctol {
+    func sendErrorAPIToVC(error:String)
+}
+
+//MARK:- WeatherService
 public final class WeatherService: NSObject {
     
     public override init() {
@@ -21,6 +25,8 @@ public final class WeatherService: NSObject {
     private let locationManger = CLLocationManager()
     private var completionHandler: ((Weather) -> Void)?
     private var API_KEY = "0b70c96fc5bfae44f72be0447ef10c3e"
+    var delegate:ErrorAPIProctol?
+
     
     //MARK:- Load Data
     public func loadWeatherData(_ completionHandler: @escaping((Weather) -> Void)) {
@@ -47,6 +53,9 @@ public final class WeatherService: NSObject {
                         if let responseData = data, let apiResponse = try? JSONDecoder().decode(WeatherAPIResponse.self, from: responseData) {
                             self.completionHandler?(Weather(response: apiResponse))
                             self.locationManger.delegate = nil
+                        } else {
+                            print("error from server")
+                            self.delegate?.sendErrorAPIToVC(error: "Your API request failed. Please try again or contact support.")
                         }
                     case .failure(let error):
                         print("error is \(error.localizedDescription)")
@@ -78,24 +87,22 @@ extension WeatherService: CLLocationManagerDelegate {
     }
 }
 
-
-
 // MARK: - Weather API response codable
 struct WeatherAPIResponse: Codable {
-    let location: Location
-    let current: Current
+    let location: Location?
+    let current: Current?
 }
 
 // MARK: - Current
 struct Current: Codable {
-    let observationTime: String
-    let temperature, weatherCode: Int
-    let weatherIcons: [String]
-    let weatherDescriptions: [String]
-    let windSpeed, windDegree: Int
-    let windDir: String
-    let pressure, precip, humidity, cloudcover: Int
-    let feelslike, uvIndex, visibility: Int
+    let observationTime: String?
+    let temperature, weatherCode: Int?
+    let weatherIcons: [String]?
+    let weatherDescriptions: [String]?
+    let windSpeed, windDegree: Int?
+    let windDir: String?
+    let pressure, precip, humidity, cloudcover: Int?
+    let feelslike, uvIndex, visibility: Int?
     
     enum CodingKeys: String, CodingKey {
         case observationTime = "observation_time"
@@ -114,10 +121,10 @@ struct Current: Codable {
 
 // MARK: - Location
 struct Location: Codable {
-    let name, country, region, lat: String
-    let lon, timezoneID, localtime: String
-    let localtimeEpoch: Int
-    let utcOffset: String
+    let name, country, region, lat: String?
+    let lon, timezoneID, localtime: String?
+    let localtimeEpoch: Int?
+    let utcOffset: String?
     
     enum CodingKeys: String, CodingKey {
         case name, country, region, lat, lon

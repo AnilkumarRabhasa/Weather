@@ -11,7 +11,7 @@ import Foundation
  Protocol for passing data
  --------------------------------*/
 protocol PassDataFromViewModelToVC {
-    func SendDataToViewController(weatherInfo: Weather, error: String)
+    func SendDataToViewController(weatherInfo: Weather)
 }
 
 //MARK:- ViewModel
@@ -34,11 +34,11 @@ public class WeatherViewModel: NSObject {
         
         weatherService.loadWeatherData { weather in
             print(weather)
-            self.cityName = weather.city.description
+            self.cityName = weather.city?.description
             self.temperature = "\(weather.temparature)°C".description
             self.weatherDescription = weather.description.capitalized.description
             self.weatherIcon = weather.tempURL.description
-            self.delegate?.SendDataToViewController(weatherInfo: weather, error: "")
+            self.delegate?.SendDataToViewController(weatherInfo: weather)
         }
         
     }

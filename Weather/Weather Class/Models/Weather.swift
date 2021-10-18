@@ -9,15 +9,15 @@ import Foundation
 
 //MARK:- Fetch required columns from api response
 public struct Weather {
-    let city: String
+    let city: String?
     let temparature: String
     let description: String
     let tempURL : String
     
     init(response: WeatherAPIResponse) {
-        city = response.location.name
-        temparature = String(response.current.temperature)
-        description = response.current.weatherDescriptions[0]
-        tempURL = response.current.weatherIcons[0]
+        city = response.location?.name ?? ""
+        temparature = "\(response.current?.temperature ?? 20)"
+        description = response.current?.weatherDescriptions?[0] ?? ""
+        tempURL = response.current?.weatherIcons?[0] ?? ""
     }
 }

@@ -8,15 +8,17 @@
 import UIKit
 import SDWebImage
 
-class ViewController: UIViewController, PassDataFromViewModelToVC {
+class ViewController: UIViewController, PassDataFromViewModelToVC, ErrorAPIProctol {
     
     /*--------------------------------
      Outlets
      --------------------------------*/
+    @IBOutlet weak var weatherInfoStaticLabel : UILabel!
     @IBOutlet weak var cityNameLabel : UILabel!
     @IBOutlet weak var temparatureLabel : UILabel!
     @IBOutlet weak var weatherImage : UIImageView!
     @IBOutlet weak var descriptionLabel : UILabel!
+    @IBOutlet weak var errorLabel : UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     /*--------------------------------
@@ -32,10 +34,13 @@ class ViewController: UIViewController, PassDataFromViewModelToVC {
     
     //MARK:- Helper method
     func initialSetup() {
+        
+        self.showHideErrorLabel(isHidden: true)
         //call api and fetch data if internet connected to device
         if ConnectionManager.shared.hasConnectivity() == true {
             self.showActivityIndicator()
             let weatherService = WeatherService()
+            weatherService.delegate = self
             let viewModel = WeatherViewModel(weatherService: weatherService)
             viewModel.refresh()
             viewModel.delegate = self
@@ -46,8 +51,8 @@ class ViewController: UIViewController, PassDataFromViewModelToVC {
         }
     }
     
-    //Protocol
-    func SendDataToViewController(weatherInfo: Weather, error: String) {
+    //Show data in UI
+    func SendDataToViewController(weatherInfo: Weather) {
         
         cityNameLabel.text = weatherInfo.city
         temparatureLabel.text = "\(weatherInfo.temparature)°C"
@@ -88,6 +93,35 @@ class ViewController: UIViewController, PassDataFromViewModelToVC {
         
         self.activityIndicator.stopAnimating()
         self.activityIndicator.isHidden = true
+    }
+    
+    /* ----------------------------------------------------
+     Show API error in UI
+     ------------------------------------------------------ */
+    func sendErrorAPIToVC(error:String) {
+        self.errorLabel.text = error
+        self.showHideErrorLabel(isHidden: false)
+        self.showHideWeatherUI(isHidden: true)
+        self.hideActivityIndicator()
+    }
+    
+    /* ----------------------------------------------------
+     Show hide error label
+     ------------------------------------------------------ */
+    func showHideErrorLabel(isHidden: Bool) {
+        self.errorLabel.isHidden = isHidden
+        
+    }
+    
+    /* ----------------------------------------------------
+     Show hide Weather UI
+     ------------------------------------------------------ */
+    func showHideWeatherUI(isHidden: Bool) {
+        self.cityNameLabel.isHidden = isHidden
+        self.weatherImage.isHidden = isHidden
+        self.descriptionLabel.isHidden = isHidden
+        self.temparatureLabel.isHidden = isHidden
+        self.weatherInfoStaticLabel.isHidden = isHidden
     }
 }
 
