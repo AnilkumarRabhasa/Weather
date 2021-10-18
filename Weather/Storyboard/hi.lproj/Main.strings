@@ -1,0 +1,12 @@
+
+/* Class = "UIViewController"; title = "View Controller"; ObjectID = "BYZ-38-t0r"; */
+"BYZ-38-t0r.title" = "View Controller";
+
+/* Class = "UILabel"; text = "text"; ObjectID = "CGU-XE-E0t"; */
+"CGU-XE-E0t.text" = "मूलपाठ";
+
+/* Class = "UILabel"; text = "Current Location Weather Information"; ObjectID = "TSh-zD-eIB"; */
+"TSh-zD-eIB.text" = "वर्तमान स्थान मौसम की जानकारी";
+
+/* Class = "UILabel"; text = "text"; ObjectID = "gec-lX-pto"; */
+"gec-lX-pto.text" = "मूलपाठ";
