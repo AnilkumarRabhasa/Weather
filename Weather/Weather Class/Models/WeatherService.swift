@@ -24,9 +24,8 @@ public final class WeatherService: NSObject {
     
     private let locationManger = CLLocationManager()
     private var completionHandler: ((Weather) -> Void)?
-    private var API_KEY = "0b70c96fc5bfae44f72be0447ef10c3e"
     var delegate:ErrorAPIProctol?
-
+    
     
     //MARK:- Load Data
     public func loadWeatherData(_ completionHandler: @escaping((Weather) -> Void)) {
@@ -43,7 +42,7 @@ public final class WeatherService: NSObject {
         self.locationManger.stopUpdatingLocation()
         location.fetchCityAndCountry { city, country, error in
             guard let city = city, error == nil else { return }
-            let urlString = "http://api.weatherstack.com/current?access_key=4c3cefd4d048e2ec65c21deb76b92b76&query=\(city)"
+            let urlString = "http://api.weatherstack.com/current?access_key=cdd383ec4b974101ceb2b05d539de827&query=\(city)"
             AF.request(urlString).response { response in
                 debugPrint(response)
                 if response.response?.statusCode == 200 || response.response?.statusCode == 201 {
@@ -55,7 +54,8 @@ public final class WeatherService: NSObject {
                             self.locationManger.delegate = nil
                         } else {
                             print("error from server")
-                            self.delegate?.sendErrorAPIToVC(error: "Your API request failed. Please try again or contact support.")
+                            let errorMsg = NSLocalizedString("Your API request failed. Please try again or contact support.", comment: "")
+                            self.delegate?.sendErrorAPIToVC(error: "\(errorMsg)")
                         }
                     case .failure(let error):
                         print("error is \(error.localizedDescription)")

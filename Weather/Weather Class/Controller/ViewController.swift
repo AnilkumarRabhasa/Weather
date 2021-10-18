@@ -54,24 +54,26 @@ class ViewController: UIViewController, PassDataFromViewModelToVC, ErrorAPIProct
     //Show data in UI
     func SendDataToViewController(weatherInfo: Weather) {
         
-        cityNameLabel.text = weatherInfo.city
-        temparatureLabel.text = "\(weatherInfo.temparature)°C"
-        descriptionLabel.text = weatherInfo.description
-        
-        if let url = URL(string: weatherInfo.tempURL ) {
-            self.hideActivityIndicator()
-            weatherImage?.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.highPriority, context: nil, progress: nil) {
-                (downloadedImage, downloadException, cacheType, downlaodURL) in
-                
-                if downloadException != nil{
-                    #if ENV_DEV
-                    print("Error downloading the image:\(String(describing: downloadException?.localizedDescription))")
-                    #endif
-                }
-                else{
-                    #if ENV_DEV
-                    print("successfully downloaded image:\(String(describing: downlaodURL?.absoluteURL))")
-                    #endif
+        DispatchQueue.main.async {
+            self.cityNameLabel.text = weatherInfo.city
+            self.temparatureLabel.text = "\(weatherInfo.temparature)°C"
+            self.descriptionLabel.text = weatherInfo.description
+            
+            if let url = URL(string: weatherInfo.tempURL ) {
+                self.hideActivityIndicator()
+                self.weatherImage?.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.highPriority, context: nil, progress: nil) {
+                    (downloadedImage, downloadException, cacheType, downlaodURL) in
+                    
+                    if downloadException != nil{
+                        #if ENV_DEV
+                        print("Error downloading the image:\(String(describing: downloadException?.localizedDescription))")
+                        #endif
+                    }
+                    else{
+                        #if ENV_DEV
+                        print("successfully downloaded image:\(String(describing: downlaodURL?.absoluteURL))")
+                        #endif
+                    }
                 }
             }
         }

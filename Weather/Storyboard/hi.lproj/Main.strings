@@ -10,3 +10,5 @@
 
 /* Class = "UILabel"; text = "text"; ObjectID = "gec-lX-pto"; */
 "gec-lX-pto.text" = "मूलपाठ";
+
+"Your API request failed. Please try again or contact support." = "आपका एपीआई अनुरोध विफल रहा। कृपया पुन: प्रयास करें या समर्थन से संपर्क करें।"
