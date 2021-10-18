@@ -8,15 +8,13 @@
 import Foundation
 
 /*--------------------------------
- Protocol
+ Protocol for passing data
  --------------------------------*/
 protocol PassDataFromViewModelToVC {
-    
     func SendDataToViewController(weatherInfo: Weather, error: String)
 }
 
 //MARK:- ViewModel
-
 public class WeatherViewModel: NSObject {
     
     var cityName: String?
