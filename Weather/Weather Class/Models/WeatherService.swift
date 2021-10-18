@@ -36,18 +36,17 @@ public final class WeatherService: NSObject {
         let location = CLLocation(latitude: coordinates.latitude, longitude:coordinates.longitude)
         location.fetchCityAndCountry { city, country, error in
             guard let city = city, error == nil else { return }
+            self.locationManger.stopUpdatingLocation()
             let urlString = "http://api.weatherstack.com/current?access_key=4c3cefd4d048e2ec65c21deb76b92b76&query=\(city)"
             AF.request(urlString).response { response in
-                debugPrint(response)
+              //  debugPrint(response)
                 if response.response?.statusCode == 200 || response.response?.statusCode == 201 {
                     UserDefaults.standard.removeObject(forKey: "AppleLanguages") // Resetting langauge
-                    
                     switch response.result {
                     case .success(let data):
                         if let responseData = data, let apiResponse = try? JSONDecoder().decode(WeatherAPIResponse.self, from: responseData) {
                             self.completionHandler?(Weather(response: apiResponse))
                             self.locationManger.delegate = nil
-                            self.locationManger.stopUpdatingLocation()
                         }
                     case .failure(let error):
                         print("error is \(error.localizedDescription)")
@@ -70,6 +69,7 @@ extension WeatherService: CLLocationManagerDelegate {
             return
         }
         UserDefaults.standard.set(["base"], forKey: "AppleLanguages")  // If user switches to Hindi langauge, the city name should be english to fetch weather info from weatherstack website. So, changing language here
+        print(location.coordinate)
         makeDataRequest(forCoordinages: location.coordinate)
     }
     
