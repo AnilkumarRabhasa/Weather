@@ -34,12 +34,12 @@ public final class WeatherService: NSObject {
     public func makeDataRequest(forCoordinages coordinates: CLLocationCoordinate2D) {
         
         let location = CLLocation(latitude: coordinates.latitude, longitude:coordinates.longitude)
+        self.locationManger.stopUpdatingLocation()
         location.fetchCityAndCountry { city, country, error in
             guard let city = city, error == nil else { return }
-            self.locationManger.stopUpdatingLocation()
             let urlString = "http://api.weatherstack.com/current?access_key=4c3cefd4d048e2ec65c21deb76b92b76&query=\(city)"
             AF.request(urlString).response { response in
-              //  debugPrint(response)
+                debugPrint(response)
                 if response.response?.statusCode == 200 || response.response?.statusCode == 201 {
                     UserDefaults.standard.removeObject(forKey: "AppleLanguages") // Resetting langauge
                     switch response.result {

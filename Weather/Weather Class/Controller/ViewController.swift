@@ -50,7 +50,7 @@ class ViewController: UIViewController, PassDataFromViewModelToVC {
     func SendDataToViewController(weatherInfo: Weather, error: String) {
         
         cityNameLabel.text = weatherInfo.city
-        temparatureLabel.text = weatherInfo.temparature
+        temparatureLabel.text = "\(weatherInfo.temparature)°C"
         descriptionLabel.text = weatherInfo.description
         
         if let url = URL(string: weatherInfo.tempURL ) {
